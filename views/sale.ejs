@@ -1,0 +1,273 @@
+<%- include('partials/header'); -%>
+
+
+<div class="container">
+    <div class="jumbotron">
+        <div id="MyClockDisplay" class="clock" onload="showTime()"></div>
+        <div class="row">
+            <div class="col">
+
+                <!-- USING THE CART FUNCTION -->
+                <form name="ShoppingList">
+                    <fieldset>
+
+                        <legend>Shopping cart</legend>
+                        <select style="width: 300px;" class="form-control-sm" name="products" id="products" value="products">
+                            <option selected width=>Select Product</option>
+                            <% products.forEach(function(product){ %>
+                            <option value="<%= product.id %>" name="name">
+                                <%= product.name.toUpperCase() %>
+                                <%= product.price %>
+                            </option>
+
+                            <%= product.quantity %>
+                            <% }); %>
+                        </select>
+
+                        <h4> Quantity: </h4><input  type="number" class="form-control-sm" name="data" id="quantity"
+                            value="1" min="1" style="width: 300px;" required>
+                        <div><span> Total= NGN </span>
+                            <h2 id="total"> 0</h2>
+                        </div>
+                        <input id="saveBtn" class="btn btn-info" type="button" value="Save" onclick="SaveItem()">
+                        <div>
+                            <a href="/" class="btn btn-info" id="home">Products</a>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+
+            <div class="col-6">
+                <div id="items_table">
+                    <h2>Shopping List</h2>
+                    <table class="table" border="1" cellpadding="3" id="list" style="width: 300px;"></table>
+                    <div id="calcTotal"> TOTAL: NGN <span id="sum"></span></div>
+                    <button id="print" class="btn btn-secondary" onclick="printData()">Print</button>
+                    <input class="btn btn-dark" type="button" value="Clear" onclick="ClearAll()">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var quanTot = 0;
+        var prods = JSON.parse('<%- JSON.stringify(products) %>');
+        let price = 0;
+        let quantity = 1;
+        let total = 0;
+
+        let elProducts = document.getElementById("products");
+        let elQuantity = document.getElementById("quantity");
+        let elTotal = document.getElementById("total");
+
+        elProducts.addEventListener("change", function (el) {
+            let id = el.target.value;
+            prods.forEach((element, index) => {
+                if (element._id === id) {
+                    quanTot = element;
+                    price = element.price;
+                    elQuantity.innerText = "1";
+                    calculateAndShowTotal(price, quantity)
+                }
+            });
+        });
+
+        elQuantity.addEventListener("change", function (el) {
+            quantity = parseInt(el.target.value);
+            calculateAndShowTotal(price, quantity)
+        });
+
+        var calculateAndShowTotal = function (price, quantity) {
+            total = price * quantity;
+            if (price > 0 && quantity > 0) {
+                elTotal.innerText = total;
+            } else {
+                elTotal.innerText = 0;
+            }
+        };
+
+
+
+        // SALE TABLE
+        /*
+    =====> Checking browser support.
+     //This step might not be required because most modern browsers do support HTML5.
+     */
+        //Function below might be redundant.
+        function CheckBrowser() {
+            if ('sessionStorage' in window && window['sessionStorage'] !== null) {
+                // We can use sessionStorage object to store data.
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        // Dynamically populate the table with shopping list items.
+        function doShowAll() {
+            if (CheckBrowser()) {
+                var key = "";
+                var list = "<tr ><th>Product</th><th>Quantity</th><th>Price</th></tr>\n";
+                var i = 0;
+                //For a more advanced feature, you can set a cap on max items in the cart.
+                for (i = 0; i <= sessionStorage.length - 1; i++) {
+                    key = sessionStorage.key(i);
+                    list += "<tr><td>" + JSON.parse(sessionStorage.getItem(key)).name.toUpperCase() + "</td>\n<td>"
+                        + JSON.parse(sessionStorage.getItem(key)).quantity + "</td>\n<td>"
+                        + (JSON.parse(sessionStorage.getItem(key)).price * JSON.parse(sessionStorage.getItem(key)).quantity) + "</tr>\n";
+                }
+                //If no item exists in the cart.
+                if (list == "<tr ><th>Product</th><th>Quantity</th><th>Price</th></tr>\n") {
+                    list += "<tr><td><i>empty</i></td>\n<td><i>empty</i></td>\n<td><i>empty</i></td></tr>\n";
+                }
+                //Bind the data to HTML table.
+
+                document.getElementById('list').innerHTML = list;
+            } else {
+                alert('Cannot save shopping list as your browser does not support HTML 5');
+            }
+        }
+        function SaveItem() {
+
+            var id = document.forms.ShoppingList.products.value;
+            var data = document.forms.ShoppingList.data.value;
+            // let id = el.target.value;
+
+            var product = prods.find((element, index) => {
+                return (element._id === id)
+
+            })
+            var prodObj = {
+                name: product.name,
+                quantity: data,
+                price: product.price
+            }
+            if (quantity <= 0) {
+                alert("Check the Quantity")
+            } else
+
+                if (product.quantity === 0 || product.quantity < quantity) {
+                    alert("Not enough Quantity");
+                } else {
+                    sessionStorage.setItem(product._id, JSON.stringify(prodObj));
+                    doShowAll();
+                    sum();
+                    updateDatabase(product._id, data);
+                }
+
+
+        }
+        function updateDatabase(id, quantity) {
+            const data = { quantity: parseInt(quantity) };
+
+
+
+
+            fetch(`/product/${id}`, {
+                method: 'PUT', // or 'PUT'
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: JSON.stringify({ quantity: parseInt(quantity) })
+            })
+                .then(response => response.json())
+                .then(data => {
+
+                })
+                .catch((error) => {
+
+                });
+        }
+        //Change an existing key-value in HTML5 storage.
+        // function ModifyItem() {
+        //     var name1 = document.forms.ShoppingList.name.value;
+        //     var data1 = document.forms.ShoppingList.data.value;
+        //     //check if name1 is already exists
+
+        //     //Check if key exists.
+        //     if (sessionStorage.getItem(name1) != null) {
+        //         //update
+        //         sessionStorage.setItem(name1, data1);
+        //         document.forms.ShoppingList.data.value = sessionStorage.getItem(name1);
+        //     }
+
+        //     doShowAll();
+        // }
+        // function RemoveItem()
+        // {
+        // var name=document.forms.ShoppingList.name.value;
+        // document.forms.ShoppingList.data.value=sessionStorage.removeItem(name);
+        // doShowAll();
+        // }
+        function ClearAll() {
+            sessionStorage.clear();
+            doShowAll();
+            sum();
+        }
+
+        //PRINTING THE RECEIPT
+        var newWin;
+        function printData() {
+            var date = new Date();
+            var year = date.getFullYear();
+            var month = date.getMonth();
+            var day = date.getDay();
+            var divToPrint = document.getElementById("list");
+            var calcTotal = document.getElementById("calcTotal");
+            var saleTime = document.getElementById("MyClockDisplay");
+            newWin = window.open("");
+            newWin.document.write("<strong>STORE NAME </strong>");
+            newWin.document.write("<br>PHONE NO: 080********");
+            newWin.document.write("<br>ADDRESS: *********** <br>");
+            newWin.document.write(divToPrint.outerHTML);
+            newWin.document.write("<strong>" + calcTotal.outerHTML + "</strong>");
+            newWin.document.write("<br> <i>" + saleTime.outerHTML + "</i>");
+            newWin.document.write(day + "/" + month + "/" + year);
+            newWin.print();
+            newWin.close();
+        }
+        function showTime() {
+            var date = new Date();
+            var h = date.getHours(); // 0 - 23
+            var m = date.getMinutes(); // 0 - 59
+            var s = date.getSeconds(); // 0 - 59
+            var session = "AM"
+
+            if (h == 0) {
+                h = 12;
+                session = "AM"
+            }
+
+            if (h > 12) {
+                h = h - 12;
+                session = "PM";
+            }
+
+            h = (h < 10) ? "0" + h : h;
+            m = (m < 10) ? "0" + m : m;
+            s = (s < 10) ? "0" + s : s;
+
+            var time = h + ":" + m + ":" + s + " " + session;
+            document.getElementById("MyClockDisplay").innerText = time;
+            document.getElementById("MyClockDisplay").textContent = time;
+
+            setTimeout(showTime, 1000);
+
+        }
+
+        showTime();
+        function sum() {
+            let rows = document.querySelectorAll("table tr td:last-child");
+            let sum = 0;
+            for (let i = 0; i < rows.length; i++) {
+                sum += Number(rows[i].textContent);
+            }
+
+            document.getElementById("sum").textContent = sum || 0;
+        }
+
+
+
+    </script>
+    <%- include('partials/footer'); -%>
