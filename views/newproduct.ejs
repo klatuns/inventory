@@ -1,0 +1,41 @@
+<%- include('partials/header'); -%>
+
+<div id="sidebar">
+  <ul>
+    <li ><a href="/admin/users" class="btn btn-lg btn-secondary" style="width: 100%;"> Users</a></li>
+    <li ><a href="/admin/create_user" class="btn btn-lg btn-secondary" style="width: 100%;">Create new user</a></li>
+    <li><a href="/admin/products" class="btn btn-lg btn-secondary" style="width: 100%;">Products List</a></li>
+    <li class="active"><a href="/admin/newproduct" class="btn btn-lg btn-secondary" style="width: 100%;">Add new products</a></li>
+    <li><a href="/sale" class="btn btn-lg btn-secondary" style="width: 100%;">Sales page</a></li>
+  </ul>
+</div>
+<div id="data" style=" height: 600px;">
+
+<div class="container">
+<h1 id="form" class="addProd">ADDING PRODUCTS</h1>
+<div style="width: 30%; margin: 25px auto;">
+    <form action="/sale" method="POST" id="form">
+        <div class="form-group">
+      <input class="form-control" type="text" name="code" id="code" placeholder="Product Code" minlength="3" maxlength="20" required>
+      </div>
+      <div class="form-group">
+      <input class="form-control" type="text" name="name" id="name" placeholder="Product Name" required>
+      </div>
+      <div class="form-group">
+      <input class="form-control" type="number" name="price" id="price" placeholder="Product Price" min="0" required>
+      </div>
+      <div class="form-group">
+      <input class="form-control" type="number" name="quantity" id="quantity" placeholder="Quantity Available" min="0"
+        required> </div>
+        <div class="form-group">
+      <input class="form-control" type="description" name="description" id="description"
+        placeholder="Product Description" required></div>
+        <div class="form-group">
+      <button class="btn btn-lg btn-secondary btn-block"  >Add Product</button>
+      </div>
+      <a id="back" class="btn btn-sm btn-dark" href="/">← Back</a>
+    </form>
+</div>
+</div>
+</div>
+<%- include('partials/footer'); -%>

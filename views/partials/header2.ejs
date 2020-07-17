@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/stylesheets/bootstrap.css">
+    <link rel="stylesheet" href="/stylesheets/main.css">
+    <link rel="stylesheet" href="/stylesheets/filtab.css">
+    <link rel="stylesheet" href="/stylesheets/fontawesome.css">
+    
+    <script src="/scripts/filtab.js"></script>
+    <script src="/scripts/jquery-3.4.1.min.js"></script>
+    <script src="/scripts/bootstrap.min.js"></script>
+    
+
+    <title>Inventory</title>
+    
+</head>
+<body> 
+    <div class="topnav">
+        <a href="/">Products</a>
+       
+        <a href="/sale">Sales</a>
+        <a href="/admin">Admin</a>
+        <div id="log">
+        <% if (!currentUser){ %>
+        <a href="/login" >Login</a>
+       
+        <% } else { %>
+            
+            <a href="#">Signed in as <%= currentUser.username %> </a>
+        <a href="/logout" class="btn btn-danger" > Logout </a>
+        <% } %>
+      </div>
+    </div>
+    <h3><%= message %></h3>
