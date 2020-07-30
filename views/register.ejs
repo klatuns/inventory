@@ -1,21 +1,38 @@
 <%- include('partials/header'); -%>
 
 <div id="sidebar">
-  <ul>
-    <li ><a href="/admin/users" class="btn btn-lg btn-secondary" style="width: 100%;"> Users</a></li>
-    <li class="active"><a href="/admin/create_user" class="btn btn-lg btn-secondary" style="width: 100%;">Create new user</a></li>
-    <li><a href="/admin/products" class="btn btn-lg btn-secondary" style="width: 100%;">Products List</a></li>
-    <li ><a href="/admin/newproduct" class="btn btn-lg btn-secondary" style="width: 100%;">Add new products</a></li>
-    <li><a href="/sale" class="btn btn-lg btn-secondary" style="width: 100%;">Sales page</a></li>
-  </ul>
+    <div class="list-group">
+        <a href="/admin/users" class="btn btn-lg btn-secondary" style="width: 100%;text-align: left;">
+          <img src="/icons/people-fill.svg" alt="" width="25" height="25" title="Tag"> Users</a>
+        <a href="/admin/create_user" class="btn btn-lg btn-secondary active" style="width: 100%;text-align: left;">
+          <img src="/icons/person-plus-fill.svg" alt="" width="25" height="25" title="Tag"> Create new user</a>
+        <a href="/admin/products" class="btn btn-lg btn-secondary" style="width: 100%;text-align: left;">
+          <img src="/icons/tag-fill.svg" alt="" width="25" height="25" title="Tag">Products List</a>
+        <a href="/admin/newproduct" class="btn btn-lg btn-secondary" style="width: 100%;text-align: left;">
+          <img src="/icons/file-diff-fill.svg" alt="" width="25" height="25" title="Tag">Add new products</a>
+        <a href="/sale" class="btn btn-lg btn-secondary" style="width: 100%;text-align: left;">
+          <img src="/icons/minecart-loaded.svg" alt="" width="25" height="25" title="Tag">Store</a>
+          <a href="/logout" class="btn btn-lg btn-danger" style="width: 100%;text-align: left;">
+            <img src="/icons/eject.svg" alt="" width="25" height="25" title="Tag">Logout</a>
+      
+    </div>
 </div>
 <div id="data" style="height: 600px;">
 
 <div class="container">
+    <% if (error && error.length > 0) {%>
+        <div class="alert alert-danger"><%= error %></div>
+        <%} %>
     <h1 style="text-align: center" id="padded">Create New User</h1>
     <div class="row" id="padded">
        <div style="width: 30%; margin: 25px auto;" id="form">
-            <form action="/admin/create_user" method="POST">
+        <form action="/admin/create_user" method="POST">
+            <div class="form-group">
+                <input class="form-control" type="text" name="firstname" placeholder="First Name" >
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="text" name="lastname" placeholder="Last Name" >
+            </div>
                 <div class="form-group">
                     <input class="form-control" type="text" name="username" placeholder="username" >
                 </div>

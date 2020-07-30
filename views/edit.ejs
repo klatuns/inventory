@@ -3,7 +3,7 @@
     
         <h1 style="text-align: center">UPDATE <%= product.name.toUpperCase() %></h1>
         <div style="width: 30%; margin: 25px auto;">
-            <form action="/sale/<%= product._id %>?_method=PUT" method="POST">
+            <form action="/admin/products/<%= product._id %>?_method=PUT" method="POST">
                 Code:
                 <div class="form-group">
                     <input class="form-control" type="text" name="product[code]" value="<%= product.code %>" minlength="3" required>
@@ -57,8 +57,10 @@
 
                 
             </form>
-            <a id="back" class="btn btn-sm btn-dark" href="/">← Back</a>
+            <a id="back" class="btn btn-sm btn-dark" href="/admin/products">← Back</a>
         </div>
     
 </div>
+
+
 <%- include('partials/header'); -%>

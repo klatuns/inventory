@@ -20,7 +20,7 @@ var express = require("express"),
     
    
     app.set("view engine", "ejs");
-    app.use( express.static( "public" ) );
+    app.use( express.static("public"));
     app.use(methodOverride("_method"));
     app.use(flash());
 
@@ -58,11 +58,13 @@ passport.serializeUser(function(user, done) {
 ///admin login passport
 // app.use(passport.initialize());
 // app.use(passport.session());
-passport.use('admin', new LocalStrategy(Admin.authenticate()));
+// passport.use('admin', new LocalStrategy(Admin.authenticate()));
 //MIDDLEWARE
 app.use (function(req, res, next){
     res.locals.currentUser = req.user;
-    res.locals.message = req.flash("error");
+    res.locals.error = req.flash("error");
+    res.locals.success = req.flash('success');
+    res.locals.info = req.flash('info');
     next();
 });
 // passport.serializeUser(Admin.serializeUser());

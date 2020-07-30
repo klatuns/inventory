@@ -1,8 +1,6 @@
 <%- include('partials/header'); -%>
 <div class="container">
-    <% if (message && message.length > 0) {%>
-    <div class="alert alert-danger"><%= message%></div>
-    <%} %>
+    
     <h1 style="text-align: center" id="padded">Login</h1>
     <div class="row" id="padded">
        <div style="width: 30%; margin: 25px auto;" id="form">
@@ -20,6 +18,7 @@
                 <div class="form-group">
                     <button class="btn btn-lg btn-primary btn-block">Login</button>
                 </div>
+               
             </form>
             
             <!-- <h5><a href="/register">Create an account!</a></h5> -->
@@ -28,6 +27,8 @@
     
 
 </div>
+
+
 <%- include('partials/footer'); -%>
 
 

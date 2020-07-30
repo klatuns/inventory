@@ -2,19 +2,14 @@ var express = require ("express");
 var router = express.Router();
 var Product = require("../models/product");
 const User = require("../models/user");
-const Admin = require("../models/admin");
-
-
 
 //THE HOMEPAGE
 router.get("/",isLoggedIn, function(req, res){
     Product.find({}, function(err, allProducts){
         if(err){
-            
             console.log(err);
         } else {
-            
-            res.render("home",{products: allProducts});
+             res.render("home",{products: allProducts});
            
         }
     })
@@ -26,6 +21,7 @@ router.get("/",isLoggedIn, function(req, res){
 router.get("/admin/newproduct", isLoggedInAdmin, function(req, res){
     res.render("newproduct")
 })
+
 //SALES PAGE
 router.get("/sale",isLoggedIn, function(req, res){
     // Get all Products from DB
@@ -40,7 +36,7 @@ router.get("/sale",isLoggedIn, function(req, res){
 });
 
 //ADDING PRODUCTS TO THE DATABASE
-router.post("/sale", isLoggedInAdmin, function(req, res){
+router.post("/admin/products", isLoggedInAdmin, function(req, res){
     // get data from form and add to products array
     var code = req.body.code;
     var name = req.body.name;
@@ -62,20 +58,22 @@ router.post("/sale", isLoggedInAdmin, function(req, res){
 });
 
 //EDITING PRODUCT
-router.get("/sale/:id/edit", isLoggedInAdmin, (req, res)=>{
+router.get("/admin/products/:id/edit", isLoggedInAdmin, (req, res)=>{
     Product.findById(req.params.id, (err, foundProduct)=>{
         res.render("edit", {product: foundProduct});
     });
 });
 
 // UPDATE PRODUCT ROUTE
-router.put("/sale/:id",isLoggedInAdmin, function(req, res){
+router.put("/admin/products/:id",isLoggedInAdmin, function(req, res){
     // find and update the correct product
     Product.findByIdAndUpdate(req.params.id, req.body.product, function(err, updatedProduct){
        if(err){
+           req.flash("error", "Check the details entered")
            res.redirect("/admin/products");
        } else {
            //redirect somewhere(Product page)
+           req.flash("success", "Product updated successfully")
            res.redirect("/admin/products");
        }
     });
@@ -137,25 +135,31 @@ router.get("/admin/products",isLoggedInAdmin, function(req, res){
 });
 
 // DELETE ROUTE
-router.delete("/sale/:id", isLoggedInAdmin, function(req, res){
+router.delete("/admin/products/:id", isLoggedInAdmin, function(req, res){
     //findByIdAndRemove
+    
     Product.findByIdAndDelete(req.params.id, function(err){
        if(err){
+           console.log(err)
            res.redirect("back");
        } else {
-           res.redirect("/");
+        req.flash("success", "Product Deleted Successfully");
+           res.redirect("/admin/products");
        }
     });
 });
 
+
 // USER DELETE ROUTE
-router.delete("/admin/:id", isLoggedInAdmin, function(req, res){
+router.delete("/admin/users/:id", isLoggedInAdmin, function(req, res){
     //findByIdAndRemove
     User.findByIdAndDelete(req.params.id, function(err){
        if(err){
+           console.log(err)
            res.redirect("back");
        } else {
-           res.redirect("/admin");
+        req.flash("success", "User Deleted Successfully");
+           res.redirect("/admin/users");
        }
     });
 });
@@ -172,6 +176,7 @@ function isLoggedInAdmin(req, res, next){
     if(!req.user || req.user.key == null){
         
         req.logout();
+        req.flash("error", "You have to be logged in");
         res.redirect("/admin/login");
         
         

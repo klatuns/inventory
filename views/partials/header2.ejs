@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,27 +11,37 @@
     
     <script src="/scripts/filtab.js"></script>
     <script src="/scripts/jquery-3.4.1.min.js"></script>
-    <script src="/scripts/bootstrap.min.js"></script>
+    <script src="/scripts/bootstrap.js"></script>
+    
     
 
     <title>Inventory</title>
-    
+
 </head>
-<body> 
+
+<body>
     <div class="topnav">
-        <a href="/">Products</a>
-       
-        <a href="/sale">Sales</a>
-        <a href="/admin">Admin</a>
+        <a href="/"><img src="/icons/tag-fill.svg" alt="" width="25" height="25" title="Tag">Products</a>
+
+        <a href="/sale"><img src="/icons/minecart-loaded.svg" alt="" width="25" height="25" title="Bootstrap">Sales</a>
+        <a href="/admin"><img src="/icons/person-circle.svg" alt="" width="25" height="25" title="Bootstrap">Admin</a>
         <div id="log">
-        <% if (!currentUser){ %>
-        <a href="/login" >Login</a>
-       
-        <% } else { %>
-            
-            <a href="#">Signed in as <%= currentUser.username %> </a>
-        <a href="/logout" class="btn btn-danger" > Logout </a>
-        <% } %>
-      </div>
+            <% if (!currentUser){ %>
+            <a href="/login">Login</a>
+
+            <% } else { %>
+
+            <a href="#"><img src="/icons/person-square.svg" alt="" width="25" height="25" title="Bootstrap">
+                <%= currentUser.firstname.toUpperCase() %> <%= currentUser.lastname.toUpperCase() %> </a>
+            <a href="/logout" class="btn btn-danger"> Logout </a>
+            <% } %>
+        </div>
     </div>
-    <h3><%= message %></h3>
+    <% if (error && error.length > 0) {%>
+    <center>
+        <div class="alert alert-danger" style="width: 30%;"><%= error%>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button></div>
+    </center>
+    <%} %>

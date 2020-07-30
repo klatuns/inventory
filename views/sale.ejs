@@ -3,24 +3,23 @@
 
 <div class="container">
     <div class="jumbotron">
+        <div style="border: 2px solid blue; background-color: yellowgreen;">
         <div id="MyClockDisplay" class="clock" onload="showTime()"></div>
+        </div>
         <div class="row">
             <div class="col">
 
                 <!-- USING THE CART FUNCTION -->
                 <form name="ShoppingList">
                     <fieldset>
-
-                        <legend>Shopping cart</legend>
-                        <select style="width: 300px;" class="form-control-sm" name="products" id="products"
-                            value="products">
-                            <option selected>Select Product</option>
+                    <legend >Shopping cart</legend>
+                        <select style="width: 300px;" class="form-control" name="products" id="products" value="products" >
+                            <option selected> Select Product</option>
                             <% products.forEach(function(product){ %>
-                            <option value="<%= product.id %>" name="name">
+                            <option value="<%= product.id %>" name="name" data-tokens="product">
                                 <%= product.name.toUpperCase() %>
                                 <%= product.price %>
                             </option>
-
                             <%= product.quantity %>
                             <% }); %>
                         </select>
@@ -30,10 +29,8 @@
                         <div><span> Total= NGN </span>
                             <h2 id="total"> 0</h2>
                         </div>
-                        <input id="saveBtn" class="btn btn-info" type="button" value="Save" onclick="SaveItem()">
-                        <div>
-                            <a href="/" class="btn btn-info" id="home">Products</a>
-                        </div>
+                        <input id="saveBtn" class="btn btn-lg btn-info" type="button" value="Purchase" onclick="SaveItem()" style="width: 50%;">
+                       
                     </fieldset>
                 </form>
             </div>
@@ -46,7 +43,7 @@
                         
                         <div id="calcTotal"> TOTAL: NGN <span id="sum"></span></div>
                         <h6 id="cashier"><strong> Cashier <%= currentUser.username.toUpperCase() %> </strong></h6>
-                        <button id="print" class="btn btn-secondary" onclick="printData()">Print</button>
+                        <button id="print" class="btn btn-secondary" onclick="printData()"><img src="/icons/printer.svg" alt="" width="25" height="25" title="Tag">Print</button>
                         <input class="btn btn-dark" type="button" value="Clear" onclick="ClearAll()">
 
                     </div>
@@ -273,8 +270,7 @@
             document.getElementById("sum").textContent = sum || 0;
         }
 
-
-
+    
     </script>
 
 

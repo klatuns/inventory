@@ -2,34 +2,33 @@ var express = require("express");
 var router = express.Router();
 var passport = require("passport");
 var User = require("../models/user");
-var Admin = require("../models/admin")
-var Product = require("../models/product");
+var Admin = require("../models/admin");
+const { isLoggedInAdmin } = require("../middleware");
 
 //REGISTRATIONS
-router.get("/admin/create_user", function (req, res) {
+router.get("/admin/create_user", isLoggedInAdmin, function (req, res) {
     res.render("register")
 });
 
 //handling user sign up
-router.post("/admin/create_user", function (req, res) {
-    req.body.username
-    req.body.password
-    User.register(new User({ username: req.body.username }), req.body.password, function (err, user) {
+router.post("/admin/create_user", isLoggedInAdmin, function (req, res) {
+    
+    User.register(new User({ username: req.body.username, firstname: req.body.firstname, lastname: req.body.lastname }), 
+    req.body.password, function (err, user) {
         if (err) {
-            console.log(err);
-            return res.render("register")
+            console.log(err.message);
+            return res.render("register", );
         } else {
             passport.authenticate("user")(req, res, function () {
                 res.redirect("/admin/users");
             })
-
-        }
+         }
     })
 });
 //login route
 //render login form
 router.get("/login", function (req, res) {
-    res.render("login", { message: req.flash("error") })
+    res.render("login")
 });
 //login logic
 router.post("/login", passport.authenticate("user", {
@@ -49,12 +48,14 @@ router.get("/admin/register", function (req, res) {
 //handling user sign up
 router.post("/admin/register", function (req, res) {
 
-    Admin.register(new Admin({ username: req.body.username, key: req.body.key }), req.body.password, function (err, user) {
+    Admin.register(new Admin({ username: req.body.username, firstname: req.body.firstname, lastname: req.body.lastname, key: req.body.key }), 
+    req.body.password, function (err, user) {
         if (err) {
             console.log(err);
             return res.render("adminregister")
         } else {
             passport.authenticate("admin")(req, res, function () {
+                
                 res.redirect("/admin");
             })
         }
@@ -63,9 +64,9 @@ router.post("/admin/register", function (req, res) {
 //Admin login route
 //render Admin login form
 router.get("/admin/login", function (req, res) {
-    res.render("adminlogin", { message: req.flash("error") })
+    res.render("adminlogin"); 
 });
-//login logic
+// login logic
 router.post("/admin/login", function(req, res, next){
     passport.authenticate('admin', function (err, user, info) {
         if (err) {
@@ -78,24 +79,19 @@ router.post("/admin/login", function(req, res, next){
                 return next(err);
             }
             
-            return res.redirect('/admin/products');
-            console.log(req.user)
+            return res.redirect('/admin');
+            
         });
     })(req, res, next);
 });
-
-/////new
 
 
 
 router.get("/logout", function (req, res) {
     req.logout();
     req.flash("error", "You have been logged out")
-    if (currentUser = req.user){
-    res.redirect("/");
-    } else {
-        res.redirect('/admin/login');
-    }
+    res.redirect("/login");
+    
 });
 
 

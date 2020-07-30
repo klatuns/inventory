@@ -3,14 +3,15 @@
   <header class="jumbotron">
 <center>
     <div style="width: 95%;">
+      <div style="background-color: rgb(118, 153, 199); border: 2px solid green;">
       <center>
-        <h2> PRODUCTS ARE DISPLAYED BELOW AND CAN BE EDITED AND DELETED, NOTE THAT ONCE DELETED IT CANNOT BE GOTTEN BACK
+        <h2 > PRODUCTS ARE DISPLAYED BELOW AND CAN BE EDITED AND DELETED, NOTE THAT ONCE DELETED IT CANNOT BE GOTTEN BACK
         </h2>
       </center>
       <br>
       <h1>PRODUCT LIST</h1>
         <input class="form-control" id="myInput" type="text" placeholder="Search for products..">
-      <br>
+      <br></div>
       <table id="myTable" class="table table-bordered table-striped">
         <thead class="thead-dark">
           <tr class="header">
@@ -32,14 +33,15 @@
             <td><%= product.description.toUpperCase() %></td>
 
             <td>
-              <a class="btn btn-sm btn-info" id="edit" href="/sale/<%= product._id %>/edit">Update</a>
+              <a class="btn btn-sm btn-info" id="edit" href="/admin/products/<%= product._id %>/edit">Update</a>
+              
               <!-- Button trigger modal -->
-              <button type="button" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#exampleModal">
+              <button type="button" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#modal<%= product._id %>">
                 Delete
               </button>
 
               <!-- Modal -->
-              <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+              <div class="modal fade" id="modal<%= product._id %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
@@ -54,7 +56,7 @@
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
-                      <form id="delete-form" action="/sale/<%= product._id %>?_method=DELETE" method="POST">
+                      <form id="delete-form" action="/admin/products/<%= product._id %>?_method=DELETE" method="POST">
                         <input id="" type="submit" class="btn btn-sm btn-danger" value="Delete">
                       </form>
                     </div>
