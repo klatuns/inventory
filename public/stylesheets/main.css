@@ -220,7 +220,11 @@ font-weight: bolder;
 color: purple;
 }
 #searchFilter{
-  background-color:  #acc2d9;
-  color: white;
+  background-color:  #d5f3e8;
+  
+  font-weight: bold;
+}
+#quantity {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-weight: bold;
 }
