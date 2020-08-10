@@ -4,17 +4,20 @@
 <div class="container">
     <div class="jumbotron">
         <div style="border: 2px solid blue; background-color: yellowgreen;">
-        <div id="MyClockDisplay" class="clock" onload="showTime()"></div>
+            <div id="MyClockDisplay" class="clock" onload="showTime()"></div>
         </div>
         <div class="row">
             <div class="col">
 
-                <!-- USING THE CART FUNCTION -->
+               
                 <form name="ShoppingList">
                     <fieldset>
-                    <legend >Shopping cart</legend>
-                        <select style="width: 300px;" class="form-control" name="products" id="products" value="products" >
-                            <option selected> Select Product</option>
+                        <legend>Shopping cart</legend>
+                        <input style="width: 300px;" class="form-control" type="text" id="searchFilter"
+                            placeholder="Search for product" onkeyup="FilterItems(this.value);" />
+                        <select size="5" class="form-control" name="products" id="products"
+                            value="products">
+                            
                             <% products.forEach(function(product){ %>
                             <option value="<%= product.id %>" name="name" data-tokens="product">
                                 <%= product.name.toUpperCase() %>
@@ -29,8 +32,9 @@
                         <div><span> Total= NGN </span>
                             <h2 id="total"> 0</h2>
                         </div>
-                        <input id="saveBtn" class="btn btn-lg btn-info" type="button" value="Purchase" onclick="SaveItem()" style="width: 50%;">
-                       
+                        <input id="saveBtn" class="btn btn-lg btn-info" type="button" value="Purchase"
+                            onclick="SaveItem()" style="width: 50%;">
+
                     </fieldset>
                 </form>
             </div>
@@ -40,10 +44,11 @@
                     <div id="items_table">
                         <h2>Shopping List</h2>
                         <table class="table" border="1" cellpadding="3" id="list" style="width: 300px;"></table>
-                        
+
                         <div id="calcTotal"> TOTAL: NGN <span id="sum"></span></div>
                         <h6 id="cashier"><strong> Cashier <%= currentUser.username.toUpperCase() %> </strong></h6>
-                        <button id="print" class="btn btn-secondary" onclick="printData()"><img src="/icons/printer.svg" alt="" width="25" height="25" title="Tag">Print</button>
+                        <button id="print" class="btn btn-secondary" onclick="printData()"><img src="/icons/printer.svg"
+                                alt="" width="25" height="25" title="Tag">Print</button>
                         <input class="btn btn-dark" type="button" value="Clear" onclick="ClearAll()">
 
                     </div>
@@ -213,7 +218,7 @@
         function printData() {
             var date = new Date();
             var year = date.getFullYear();
-            var month = date.getMonth() +1;
+            var month = date.getMonth() + 1;
             var day = date.getDate();
             var divToPrint = document.getElementById("list");
             var calcTotal = document.getElementById("calcTotal");
@@ -225,7 +230,7 @@
             newWin.document.write("<br>ADDRESS: *********** <br>");
             newWin.document.write(divToPrint.outerHTML);
             newWin.document.write("<strong>" + calcTotal.outerHTML + "</strong>");
-            newWin.document.write("<strong><i>"+ cashier.innerText + "</i>" + " ");
+            newWin.document.write("<strong><i>" + cashier.innerText + "</i>" + " ");
             newWin.document.write(day + "/" + month + "/" + year + "  " + saleTime.outerHTML);
             newWin.print();
             // newWin.close();
@@ -270,7 +275,37 @@
             document.getElementById("sum").textContent = sum || 0;
         }
 
-    
+        //SEARCHING SELECT TAG
+        var ddlText, ddlValue;
+        function CacheItems() {
+            ddlText = new Array();
+            ddlValue = new Array();
+
+            for (var i = 0; i < elProducts.options.length; i++) {
+                ddlText[ddlText.length] = elProducts.options[i].text;
+                ddlValue[ddlValue.length] = elProducts.options[i].value;
+            }
+        }
+        window.onload = CacheItems;
+
+        function FilterItems(value) {
+            elProducts.options.length = 0;
+            for (var i = 0; i < ddlText.length; i++) {
+                if (ddlText[i].toLowerCase().indexOf(value) != -1 || ddlText[i].toUpperCase().indexOf(value) != -1) {
+                    AddItem(ddlText[i], ddlValue[i]);
+                }
+            }
+        }
+
+        function AddItem(text, value) {
+            var opt = document.createElement("option");
+            opt.text = text;
+            opt.value = value;
+            elProducts.options.add(opt);
+        }
+
+
+
     </script>
 
 

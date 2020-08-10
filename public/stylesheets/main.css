@@ -210,3 +210,17 @@ font-weight: bold;
   font-weight: bold;
   border-bottom: solid 4px blueviolet;
 }
+#products {
+  width: 300px; 
+  background-color: #acc2d9;
+}
+option:hover{
+border: 2px solid purple;
+font-weight: bolder;
+color: purple;
+}
+#searchFilter{
+  background-color:  #acc2d9;
+  color: white;
+  font-weight: bold;
+}
