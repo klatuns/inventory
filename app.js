@@ -5,31 +5,30 @@ var express = require("express"),
     User = require("./models/user"),
     Admin = require("./models/admin"),
     Product = require("./models/product"),
-    mongoose = require ("mongoose"),
+    mongoose = require("mongoose"),
     passport = require("passport"),
     LocalStrategy = require("passport-local"),
     methodOverride = require("method-override")
-    
-    var productRoute  = require("./routes/products"),
-        indexRoutes   = require("./routes/index")
+
+var productRoute = require("./routes/products"),
+    indexRoutes = require("./routes/index")
 
 
-    passportLocalMongoose = require("passport-local-mongoose")
-    
-    app.use(bodyParser.urlencoded({extended: true}))
-    
-   
-    app.set("view engine", "ejs");
-    app.use( express.static("public"));
-    app.use(methodOverride("_method"));
-    app.use(flash());
+passportLocalMongoose = require("passport-local-mongoose")
 
-    mongoose.connect("mongodb://localhost/inventory", 
-    { 
-        useNewUrlParser: true, 
-        useUnifiedTopology: true ,
-        useFindAndModify: false
-    });
+app.use(bodyParser.urlencoded({ extended: true }))
+
+
+app.set("view engine", "ejs");
+app.use(express.static("public"));
+app.use(methodOverride("_method"));
+app.use(flash());
+
+mongoose.connect("mongodb+srv://klatuns:inventory123@inventory.lc1xu.gcp.mongodb.net/inventory?retryWrites=true&w=majority", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false
+});
 // CONFIGURING PASSPORT
 app.use(require("express-session")({
     secret: "this is a product",
@@ -43,15 +42,15 @@ var Model = mongoose.model;
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use('user', new LocalStrategy(User.authenticate()));
-passport.use('admin', new LocalStrategy(Admin.authenticate()));     
-passport.serializeUser(function(user, done) { 
+passport.use('admin', new LocalStrategy(Admin.authenticate()));
+passport.serializeUser(function(user, done) {
     done(null, user);
-  });
-  
-  passport.deserializeUser(function(user, done) {
-    if(user!=null)
-      done(null,user);
-  });
+});
+
+passport.deserializeUser(function(user, done) {
+    if (user != null)
+        done(null, user);
+});
 // passport.serializeUser(User.serializeUser());
 // passport.deserializeUser(User.deserializeUser());
 
@@ -60,7 +59,7 @@ passport.serializeUser(function(user, done) {
 // app.use(passport.session());
 // passport.use('admin', new LocalStrategy(Admin.authenticate()));
 //MIDDLEWARE
-app.use (function(req, res, next){
+app.use(function(req, res, next) {
     res.locals.currentUser = req.user;
     res.locals.error = req.flash("error");
     res.locals.success = req.flash('success');
@@ -69,8 +68,13 @@ app.use (function(req, res, next){
 });
 // passport.serializeUser(Admin.serializeUser());
 // passport.deserializeUser(Admin.deserializeUser());
-app.use (indexRoutes);
+app.use(indexRoutes);
 app.use(productRoute);
-app.listen(1234, function(req, res){
-        console.log("THE PRODUCT SERVER IS RUNNING")
-    });
+
+let port = process.env.PORT;
+if (port == null || port == "") {
+    port = 1234;
+}
+app.listen(port, function(req, res) {
+    console.log("THE PRODUCT SERVER IS RUNNING ON PORT 1234")
+});

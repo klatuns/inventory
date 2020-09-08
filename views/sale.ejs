@@ -9,15 +9,14 @@
         <div class="row">
             <div class="col">
 
-               
+
                 <form name="ShoppingList">
                     <fieldset>
                         <legend>Shopping cart</legend>
                         <input style="width: 300px;" class="form-control" type="text" id="searchFilter"
                             placeholder="Search for product" onkeyup="FilterItems(this.value);" />
-                        <select size="3" class="form-control" name="products" id="products"
-                            value="products">
-                            
+                        <select size="3" class="form-control" name="products" id="products" value="products">
+
                             <% products.forEach(function(product){ %>
                             <option value="<%= product.id %>" name="name" data-tokens="product">
                                 <%= product.name.toUpperCase() %>
@@ -43,13 +42,13 @@
                 <center>
                     <div id="items_table">
                         <h2>Shopping List</h2>
-                        <table class="table" border="1" cellpadding="3" id="list" style="width: 300px;"></table>
+                        <table class="table" border="1" cellpadding="3" id="list" style="width: 400px;"></table>
 
                         <div id="calcTotal"> TOTAL: NGN <span id="sum"></span></div>
-                        <h6 id="cashier"><strong> Cashier <%= currentUser.username.toUpperCase() %> </strong></h6>
+                        <h6 id="cashier"><strong> Cashier <%= currentUser.firstname.toUpperCase() %> <%= currentUser.lastname.toUpperCase() %> </strong></h6>
                         <button id="print" class="btn btn-secondary" onclick="printData()"><img src="/icons/printer.svg"
                                 alt="" width="25" height="25" title="Tag">Print</button>
-                        <input class="btn btn-dark" type="button" value="Clear" onclick="ClearAll()">
+                        <input id="clear" class="btn btn-dark" type="button" value="Clear" onclick="ClearAll()">
 
                     </div>
                 </center>
@@ -120,9 +119,9 @@
                 //For a more advanced feature, you can set a cap on max items in the cart.
                 for (i = 0; i <= sessionStorage.length - 1; i++) {
                     key = sessionStorage.key(i);
-                    list += "<tr><td>" + JSON.parse(sessionStorage.getItem(key)).name.toUpperCase() + "</td>\n<td>"
+                    list += "<tr id='" +key +"'><td>" + JSON.parse(sessionStorage.getItem(key)).name.toUpperCase() + "</td>\n<td>"
                         + JSON.parse(sessionStorage.getItem(key)).quantity + "</td>\n<td>"
-                        + (JSON.parse(sessionStorage.getItem(key)).price * JSON.parse(sessionStorage.getItem(key)).quantity) + "</tr>\n";
+                        + (JSON.parse(sessionStorage.getItem(key)).price * JSON.parse(sessionStorage.getItem(key)).quantity) + "</td><td class='close'>X</td></tr>\n";
                 }
                 //If no item exists in the cart.
                 if (list == "<tr ><th>Product</th><th>Quantity</th><th>Price</th></tr>\n") {
@@ -135,6 +134,7 @@
                 alert('Cannot save shopping list as your browser does not support HTML 5');
             }
         }
+        var tableArr = []
         function SaveItem() {
 
             var id = document.forms.ShoppingList.products.value;
@@ -159,13 +159,19 @@
                 } else {
                     sessionStorage.setItem(product._id, JSON.stringify(prodObj));
                     doShowAll();
+                    
+                    tableArr.push({
+                        id: product._id,
+                        data: data,
+                        price: product.price
+                    })
                     sum();
-                    updateDatabase(product._id, data);
                 }
 
 
         }
         function updateDatabase(id, quantity) {
+
             const data = { quantity: parseInt(quantity) };
 
 
@@ -210,12 +216,16 @@
         function ClearAll() {
             sessionStorage.clear();
             doShowAll();
+            tableArr = [];
             sum();
         }
 
         //PRINTING THE RECEIPT
         var newWin;
         function printData() {
+            tableArr.forEach(totalQ => {
+                updateDatabase(totalQ.id, totalQ.data);
+            })
             var date = new Date();
             var year = date.getFullYear();
             var month = date.getMonth() + 1;
@@ -265,8 +275,14 @@
         }
 
         showTime();
+        
+        // function sum() {
+        //    const sum = tableArr.reduce((acc, element) =>acc + element.price, 0)
+        //     document.getElementById("sum").textContent = sum || 0;
+        // }
+
         function sum() {
-            let rows = document.querySelectorAll("table tr td:last-child");
+            let rows = document.querySelectorAll("table tr td:nth-child(3)");
             let sum = 0;
             for (let i = 0; i < rows.length; i++) {
                 sum += Number(rows[i].textContent);
@@ -274,6 +290,7 @@
 
             document.getElementById("sum").textContent = sum || 0;
         }
+
 
         //SEARCHING SELECT TAG
         var ddlText, ddlValue;
@@ -303,9 +320,25 @@
             opt.value = value;
             elProducts.options.add(opt);
         }
+        document.getElementById("list").addEventListener('click', function (e) {
+            if (e.target.classList.contains('close')){
+                const parent= e.target.parentNode;
+                sessionStorage.removeItem(parent.id)
+                const index = tableArr.findIndex(e=> e.id == parent.id)
+                tableArr.splice(index, 1)
+                parent.remove();
+            }
+            sum();
+})
 
-
-
+var hidebtn = document.getElementById("print");
+hidebtn.addEventListener ('click', function(){
+    hidebtn.style.display="none";
+});
+var clearbtn = document.getElementById("clear");
+clearbtn.addEventListener('click', function(){
+    hidebtn.style.display="inline"
+})
     </script>
 
 
