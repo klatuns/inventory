@@ -1,0 +1,18 @@
+<%- include('partials/header'); -%>
+    <div style="width: 30%; margin: 25px auto;" id="form">
+
+        <center>
+            <div class="alert alert-danger">
+                <%= Error %>
+            </div>
+        </center>
+
+        <form class="form-group" action="/form" method="post">
+            <div> <input class="form-control" type="password" name="pass"></div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-lg btn-secondary btn-block">Submit</button>
+            </div>
+        </form>
+
+    </div>
+    <%- include('partials/footer'); -%>
