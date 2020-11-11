@@ -1,58 +1,67 @@
 <%- include('partials/header2'); -%>
-<div>
-  <header class="jumbotron">
-    <div class="container">
-      <center>
-        <h2> PRODUCTS ARE DISPLAYED BELOW AND CAN BE EDITED AND DELETED, NOTE THAT ONCE DELETED IT CANNOT BE GOTTEN BACK
-        </h2>
-      </center>
-      <br>
-      <h1>PRODUCT LIST</h1>
-        <input class="form-control" id="myInput" type="text" placeholder="Search for products..">
-      <br>
-      <table id="myTable" class="table table-bordered table-striped">
-        <thead class="thead-dark">
-          <tr class="header">
-            <th onclick="sortTable(0)" scope="col">CODE</th>
-            <th onclick="sortTable(1)" scope="col">PRODUCT</th>
-            <th onclick="sortTable(2)" scope="col">PRICE</th>
-            <th onclick="sortTable(3)" scope="col">QUANTITY</th>
-            <th scope="col">DESCRIPTION</th>
-            
-          </tr>
-        </thead>
-        <% products.forEach(function(prod){ %>
-        <tbody id="myTable">
-          <tr>
-            <td><%= prod.code %></td>
-            <td><%= prod.name.toUpperCase() %></td>
-            <td>NGN <%= prod.price %> </td>
-            <td><%= prod.quantity %></td>
-            <td><%= prod.description.toUpperCase() %></td>
-          </tr>
-        </tbody>
-        <% }); %>
-      </table>
+    <div class="contents">
+        <header class="jumbotron">
+            <div class="container">
 
+                <h2 class="brand-name"> PRODUCTS ARE DISPLAYED BELOW AND CAN BE EDITED AND DELETED, NOTE THAT ONCE DELETED IT CANNOT BE GOTTEN BACK
+                </h2>
+
+                <br>
+                <h1>PRODUCT LIST</h1>
+                <input class="form-control" id="myInput" type="text" placeholder="Search for products..">
+                <br>
+                <table id="myTable" class="table table-bordered table-striped">
+                    <thead class="thead-dark">
+                        <tr class="header">
+                            <th onclick="sortTable(0)" scope="col">CODE</th>
+                            <th onclick="sortTable(1)" scope="col">PRODUCT</th>
+                            <th onclick="sortTable(2)" scope="col">PRICE</th>
+                            <th onclick="sortTable(3)" scope="col">QUANTITY</th>
+                            <th scope="col">DESCRIPTION</th>
+
+                        </tr>
+                    </thead>
+                    <% products.forEach(function(prod){ %>
+                        <tbody id="myTable">
+                            <tr>
+                                <td>
+                                    <%= prod.code %>
+                                </td>
+                                <td>
+                                    <%= prod.name.toUpperCase() %>
+                                </td>
+                                <td>NGN
+                                    <%= prod.price %>
+                                </td>
+                                <td>
+                                    <%= prod.quantity %>
+                                </td>
+                                <td>
+                                    <%= prod.description.toUpperCase() %>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <% }); %>
+                </table>
+
+            </div>
+
+        </header>
     </div>
 
-  </header>
-</div>
+
+
+    <script>
+        $(document).ready(function() {
+            $("#myInput").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#myTable tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
 
 
 
-<script>
-  $(document).ready(function () {
-    $("#myInput").on("keyup", function () {
-      var value = $(this).val().toLowerCase();
-      $("#myTable tr").filter(function () {
-        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-      });
-    });
-  });
-
-</script>
-
-
-
-<%- include('partials/footer2'); -%>
+    <%- include('partials/footer2'); -%>

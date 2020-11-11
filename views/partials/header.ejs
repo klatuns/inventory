@@ -13,98 +13,51 @@
     <script src="/scripts/jquery-3.4.1.min.js"></script>
     <script src="/scripts/bootstrap.js"></script>
     <title>Inventory</title>
-    <style>
-        li {
-            list-style-type: none;
-            padding-top: 10px;
-        }
-        
-        button {
-            display: none;
-        }
-        
-        a {
-            text-decoration: none;
-            color: #f2f2f2;
-            text-align: center;
-            padding: 1vw;
-            font-size: 1.5rem;
-            font-weight: 400;
-            line-height: 1.5;
-            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-        }
-        
-        a:hover {
-            background-color: #c6e9ff;
-            color: black;
-        }
-        
-        .topnav {
-            width: 100vw;
-            background-color: #333;
-            overflow: hidden;
-            height: 60px;
-        }
-        
-        ul {
-            margin: 0;
-            padding: 0;
-            display: flex;
-        }
-        
-        body {
-            margin: 0;
-        }
-        
-        @media only screen and (max-width: 600px) {
-            ul {
-                flex-direction: column;
-            }
-            li {
-                margin: 0;
-            }
-            a {
-                display: block;
-            }
-            button {
-                display: block;
-                padding: 2vw;
-                font-size: 3vh;
-                background-color: #afe0ff;
-                border: none;
-                outline: none;
-                cursor: pointer;
-                align-self: flex-end;
-            }
-        }
-    </style>
+
 
 </head>
 
 <body>
-    <div class="topnav">
-        <center>
-            <div style="width: 95%;">
-                <a href="/admin/products"><img src="/icons/tag-fill.svg" alt="" width="25" height="25" title="Tag">Products Page</a>
-                <a href="/admin/users"><img src="/icons/people-fill.svg" alt="" width="25" height="25" title="Tag">Users</a>
-                <a href="/sale"><img src="/icons/cart-plus.svg" alt="" width="25" height="25" title="Tag">Store</a>
-                <a href="/admin"><img src="/icons/person-circle.svg" alt="" width="25" height="25" title="Tag">Admin</a>
-                <div id="log">
-                    <% if (!currentUser){ %>
-                        <a href="/admin/login">Login</a>
+    <nav>
 
-                        <% } else { %>
-                            <a href="/admin/newproduct"><img src="/icons/file-diff-fill.svg" alt="" width="25" height="25" title="Tag">Add New Product</a>
-                            <a href="/admin"><img src="/icons/person-bounding-box.svg" alt="" width="25" height="25" title="Tag">
-                                <%= currentUser.firstname.toUpperCase() %>
-                                    <%= currentUser.lastname.toUpperCase() %>
-                            </a>
-                            <a href="/logout" class="btn btn-danger"> <img src="/icons/eject.svg" alt="" width="25" height="25" title="Tag">Logout </a>
-                            <% } %>
-                </div>
-            </div>
-        </center>
-    </div>
+
+        <div class="burger">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+        <ul class="nav-links">
+            <li>
+                <a href="/admin/products"><img src="/icons/tag-fill.svg" alt="" width="25" height="25" title="Tag">Products Page</a>
+            </li>
+            <li>
+                <a href="/admin/users"><img src="/icons/people-fill.svg" alt="" width="25" height="25" title="Tag">Users</a>
+            </li>
+            <li>
+                <a href="/sale"><img src="/icons/cart-plus.svg" alt="" width="25" height="25" title="Tag">Store</a>
+            </li>
+            <li>
+                <a href="/admin"><img src="/icons/person-circle.svg" alt="" width="25" height="25" title="Tag">Admin</a>
+            </li>
+
+        </ul>
+        <div id="log">
+            <% if (!currentUser){ %>
+                <a href="/admin/login">Login</a>
+
+                <% } else { %>
+
+                    <a href="/admin" class="name"><img src="/icons/person-bounding-box.svg" alt="" width="25" height="25" title="Tag">
+                        <%= currentUser.firstname.toUpperCase() %>
+                            <%= currentUser.lastname.toUpperCase() %>
+                    </a>
+                    <a href="/logout" class="btn btn-danger"> <img src="/icons/eject.svg" alt="" width="25" height="25" title="Tag">Logout </a>
+                    <% } %>
+        </div>
+
+
+    </nav>
+    <div class="space-fix"></div>
     <% if (error && error.length > 0) {%>
         <center>
             <div class="alert alert-danger" style="width: 30%;">

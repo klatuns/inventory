@@ -8,40 +8,57 @@
     <link rel="stylesheet" href="/stylesheets/main.css">
     <link rel="stylesheet" href="/stylesheets/filtab.css">
     <link rel="stylesheet" href="/stylesheets/fontawesome.css">
-    
+
     <script src="/scripts/filtab.js"></script>
     <script src="/scripts/jquery-3.4.1.min.js"></script>
     <script src="/scripts/bootstrap.js"></script>
-    
-    
+
+
 
     <title>Inventory</title>
 
 </head>
 
 <body>
-    <div class="topnav">
-        <a href="/"><img src="/icons/tag-fill.svg" alt="" width="25" height="25" title="Tag">Products</a>
+    <nav>
+        <div class="burger">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+        <ul class="nav-links">
+            <li>
+                <a href="/"><img src="/icons/tag-fill.svg" alt="" width="25" height="25" title="Tag">Products</a>
+            </li>
 
-        <a href="/sale"><img src="/icons/minecart-loaded.svg" alt="" width="25" height="25" title="Bootstrap">Store</a>
-        <a href="/admin"><img src="/icons/person-circle.svg" alt="" width="25" height="25" title="Bootstrap">Admin</a>
+            <li>
+                <a href="/sale"><img src="/icons/minecart-loaded.svg" alt="" width="25" height="25" title="Bootstrap">Store</a>
+            </li>
+            <li>
+                <a href="/admin"><img src="/icons/person-circle.svg" alt="" width="25" height="25" title="Bootstrap">Admin</a>
+            </li>
+        </ul>
         <div id="log">
             <% if (!currentUser){ %>
-            <a href="/login">Login</a>
+                <a href="/login">Login</a>
 
-            <% } else { %>
+                <% } else { %>
 
-            <a href="#"><img src="/icons/person-square.svg" alt="" width="25" height="25" title="Bootstrap">
-                <%= currentUser.firstname.toUpperCase() %> <%= currentUser.lastname.toUpperCase() %> </a>
-            <a href="/logout" class="btn btn-danger"> Logout </a>
-            <% } %>
+                    <a href="#" class="name"><img src="/icons/person-square.svg" alt="" width="25" height="25" title="Bootstrap">
+                        <%= currentUser.firstname.toUpperCase() %>
+                            <%= currentUser.lastname.toUpperCase() %>
+                    </a>
+                    <a href="/logout" class="btn btn-danger"> Logout </a>
+                    <% } %>
         </div>
-    </div>
+    </nav>
+    <div class="space-fix"></div>
     <% if (error && error.length > 0) {%>
-    <center>
-        <div class="alert alert-danger" style="width: 30%;"><%= error%>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <center>
+            <div class="alert alert-danger" style="width: 30%;">
+                <%= error%>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button></div>
-    </center>
-    <%} %>
+        </center>
+        <%} %>
