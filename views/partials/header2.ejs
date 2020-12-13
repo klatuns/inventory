@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/stylesheets/filtab.css">
     <link rel="stylesheet" href="/stylesheets/fontawesome.css">
 
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
     <script src="/scripts/filtab.js"></script>
     <script src="/scripts/jquery-3.4.1.min.js"></script>
     <script src="/scripts/bootstrap.js"></script>
@@ -40,7 +41,7 @@
         </ul>
         <div id="log">
             <% if (!currentUser){ %>
-                <a href="/login">Login</a>
+                <a href="/login" class="btn btn-warning">Login</a>
 
                 <% } else { %>
 

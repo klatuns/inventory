@@ -39,8 +39,10 @@
                 <div class="col-md-6">
                     <center>
                         <div id="items_table">
+
                             <h2>Shopping List</h2>
-                            <table class="table" border="1" cellpadding="3" id="list" style="width: 400px;"></table>
+
+                            <table class="table" border="1" cellpadding="3" id="list" style="width: 400px;" name="list"></table>
 
                             <div id="calcTotal"> TOTAL: NGN <span id="sum"></span></div>
                             <h6 id="cashier"><strong> Cashier <%= currentUser.firstname.toUpperCase() %> <%= currentUser.lastname.toUpperCase() %> </strong></h6>
@@ -147,7 +149,8 @@
                 var prodObj = {
                     name: product.name,
                     quantity: data,
-                    price: product.price
+                    price: product.price,
+                    name: product.name
                 }
                 if (quantity <= 0) {
                     alert("Check the Quantity")
@@ -162,7 +165,8 @@
                     tableArr.push({
                         id: product._id,
                         data: data,
-                        price: product.price
+                        price: product.price,
+                        name: product.name
                     })
                     sum();
                 }
@@ -178,7 +182,7 @@
 
 
 
-
+                //! updating the quantity
                 fetch(`/product/${id}`, {
                         method: 'PUT', // or 'PUT'
                         headers: {
@@ -196,6 +200,30 @@
 
                     });
             }
+
+            // function saveHistory(id, quantity) {
+
+            //     const data = {
+            //         quantity: parseInt(quantity)
+            //     };
+            //     //! saving the table
+            //     fetch(`/product/${id}`, {
+            //             method: 'POST', // or 'PUT'
+            //             headers: {
+            //                 'Content-Type': 'application/x-www-form-urlencoded',
+            //             },
+            //             body: JSON.stringify({
+            //                 quantity: parseInt(quantity)
+            //             })
+            //         })
+            //         .then(response => response.json())
+            //         .then(data => {
+
+            //         })
+            //         .catch((error) => {
+
+            //         });
+            // }
             //Change an existing key-value in HTML5 storage.
             // function ModifyItem() {
             //     var name1 = document.forms.ShoppingList.name.value;
@@ -227,6 +255,10 @@
             //PRINTING THE RECEIPT
             var newWin;
 
+
+
+
+
             function printData() {
                 tableArr.forEach(totalQ => {
                     updateDatabase(totalQ.id, totalQ.data);
@@ -239,7 +271,34 @@
                 var calcTotal = document.getElementById("calcTotal");
                 var saleTime = document.getElementById("MyClockDisplay");
                 var cashier = document.getElementById("cashier");
-                newWin = window.open("");
+
+
+                //!fetching the receipt
+                // console.log(tableArr);
+                fetch(`/sale/receipt`, {
+                        method: 'post', // or 'PUT'
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: JSON.stringify({
+
+                            table: tableArr
+
+
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // console.log(data);
+                    })
+                    .catch((error) => {
+
+                    });
+
+                ////////////////////////////////////////////
+
+                newWin = window.open("/sale/receipt", "receipt");
+
                 newWin.document.write("<strong>STORE NAME </strong>");
                 newWin.document.write("<br>PHONE NO: 080********");
                 newWin.document.write("<br>ADDRESS: *********** <br>");
@@ -247,10 +306,11 @@
                 newWin.document.write("<strong>" + calcTotal.outerHTML + "</strong>");
                 newWin.document.write("<strong><i>" + cashier.innerText + "</i>" + " ");
                 newWin.document.write(day + "/" + month + "/" + year + "  " + saleTime.outerHTML);
-                console.log(divToPrint.textContent);
+
                 newWin.print();
-                // ClearAll();
-                // window.location = ("localhost:1234/sale/?print=" + divToPrint.textContent);
+                //! saving the printing 
+
+                ClearAll();
                 newWin.close();
             }
 
@@ -341,14 +401,14 @@
                 sum();
             })
 
-            var hidebtn = document.getElementById("print");
-            hidebtn.addEventListener('click', function() {
-                hidebtn.style.display = "none";
-            });
-            var clearbtn = document.getElementById("clear");
-            clearbtn.addEventListener('click', function() {
-                hidebtn.style.display = "inline"
-            })
+            // var hidebtn = document.getElementById("print");
+            // hidebtn.addEventListener('click', function() {
+            //     hidebtn.style.display = "none";
+            // });
+            // var clearbtn = document.getElementById("clear");
+            // clearbtn.addEventListener('click', function() {
+            //     hidebtn.style.display = "inline"
+            // })
         </script>
 
 
